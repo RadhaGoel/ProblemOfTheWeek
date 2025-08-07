@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class FriendGroups {
+
+    public static int countFriendGroups(int N, Map<Integer, List<Integer>> friendship) {
+        Set<Integer> visited = new HashSet<>();
+        int groupCount = 0;
+
+        for (int student = 0; student < N; student++) {
+            if (!visited.contains(student)) {
+                dfs(student, friendship, visited);
+                groupCount++;
+            }
+        }
+
+        return groupCount;
+    }
+
+    private static void dfs(int student, Map<Integer, List<Integer>> friendship, Set<Integer> visited) {
+        visited.add(student);
+        for (int friend : friendship.getOrDefault(student, new ArrayList<>())) {
+            if (!visited.contains(friend)) {
+                dfs(friend, friendship, visited);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read number of students
+        System.out.print("Enter number of students (N): ");
+        int N = scanner.nextInt();
+        scanner.nextLine();  // Consume the newline
+
+        // Initialize friendship map
+        Map<Integer, List<Integer>> friendship = new HashMap<>();
+
+        // Read friendships
+        System.out.println("Enter friendship list for each student:");
+        for (int i = 0; i < N; i++) {
+            System.out.print("Student " + i + " friends (space-separated IDs): ");
+            String line = scanner.nextLine().trim();
+            List<Integer> friends = new ArrayList<>();
+            if (!line.isEmpty()) {
+                String[] parts = line.split(" ");
+                for (String part : parts) {
+                    friends.add(Integer.parseInt(part));
+                }
+            }
+            friendship.put(i, friends);
+        }
+
+        int result = countFriendGroups(N, friendship);
+        System.out.println("Total friend groups: " + result);
+    }
+}
