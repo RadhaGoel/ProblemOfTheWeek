@@ -1,0 +1,6 @@
+class Solution {
+    public static int swapBits(int n) {
+        // code here
+        return  ((n & 0xAA) >> 1) | ((n & 0x55) << 1);
+    }
+}
